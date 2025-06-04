@@ -8,6 +8,10 @@ Krótka instrukcja uruchamiania:
 3. Konfiguruj zmienne środowiskowe: zmień .env.example na .env i uzupełnij klucze
 
 Opis układ folderów:
+
+main.py - integracja różnych elementów aplikacji
+run.py - uruchamianie aplikacji
+
 src/
 	core/ - folder głownej logiki aplikacji
 		__init__.py - technicznie do ulatwienia importow
@@ -31,8 +35,7 @@ tests/
 	
 docs/
 
-main.py - integracja różnych elementów aplikacji
-run.py - uruchamianie aplikacji
+
 
 		
 ###########################
@@ -47,7 +50,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 ########################## Rozwiązania znanych problemów #########
-#rozwiązanie problemu niewidzących się folderów na tym samym poziomie 
+#w razie konieczności do testów: rozwiązanie problemu niewidzących się folderów na tym samym poziomie 
 import os
 import sys
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
