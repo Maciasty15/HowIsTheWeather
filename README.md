@@ -35,7 +35,9 @@ tests/
 	
 docs/
 
-
+#####################
+Znalezione API
+https://www.weatherapi.com/
 
 		
 ###########################
