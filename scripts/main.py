@@ -1,3 +1,5 @@
+#Punkt wejścia do aplikacji
+
 import dash
 from dash import html
 
