@@ -1,5 +1,7 @@
 from src.utils.logger import get_logger
+
 logger = get_logger(__name__)
+
 
 class App:
     """
@@ -12,4 +14,4 @@ class App:
 
     def run(self):
         logger.debug("Uruchamiam logikę aplikacji")
-        #TODO Tu będzie uruchamianie logiki aplikacji poprzez integracje z src/core/engine.py
+        # TODO Tu będzie uruchamianie logiki aplikacji poprzez integracje z src/core/engine.py

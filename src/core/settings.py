@@ -6,5 +6,5 @@ import os
 load_dotenv()
 WEATHERAPI_API_KEY = os.getenv("WEATHERAPI_API_KEY")
 
-#DEBUG
+# DEBUG
 print(WEATHERAPI_API_KEY)
