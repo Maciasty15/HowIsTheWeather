@@ -7,6 +7,7 @@ AI_GEMINI_KEY = os.getenv("AI_GEMINI_KEY")
 
 client = genai.Client(api_key=AI_GEMINI_KEY)
 
+
 def get_recommendation(location, weather_description):
     prompt = (
         f"Lokalizacja: {location}\n"

@@ -1,6 +1,4 @@
 import os
-from typing import Any, Dict, Optional
-
 import requests
 from dotenv import load_dotenv
 
@@ -8,9 +6,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Stałe API
-OPENMETO_BASE_URL = os.getenv("WEATHERAPI_API_BASE_URL") 
+OPENMETO_BASE_URL = os.getenv("WEATHERAPI_API_BASE_URL")
 
-def get_coordinates(location) -> (tuple[str, str] | tuple[None, None]):
+
+def get_coordinates(location) -> tuple[str, str] | tuple[None, None]:
     url = f"{OPENMETO_BASE_URL}search?name={location}&count=1&language=pl&format=json"
     response = requests.get(url)
     if response.status_code == 200:

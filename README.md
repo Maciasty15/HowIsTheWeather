@@ -1,4 +1,4 @@
-Aplikacja pobierająca dane pogodowe i o jakości powietrza z publicznych API, 
+Aplikacja pobierająca dane pogodowe i o jakości powietrza z publicznych API,
 a następnie sugerująca użytkownikowi odpowiedni ubiór.
 
 Krótka instrukcja uruchamiania:
@@ -20,26 +20,26 @@ src/
 		air_quality.py - logika pobierania danych o smogu (przez skrypty do API w services)
 		recommender.py - Logika rekomendacji
 		settings.py - ładowanie danych do konfiguracji z .env (klucze do API itp)
-		
+
 	services/ - Połączenia z api, bazy zewnętrzne
 		__init__.py
-	
+
 	ui/  - intefejs użytkownika
 		__init__.py
 	utils/ - narzędzia pomocnicze
 		__init__.py
-	
+
 tests/
 	__init__.py
-	
-	
+
+
 docs/
 
 #####################
 Znalezione API
 https://www.weatherapi.com/
 
-		
+
 ###########################
 Użycie logów:
 import logging
@@ -52,7 +52,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 ########################## Rozwiązania znanych problemów #########
-#w razie konieczności do testów: rozwiązanie problemu niewidzących się folderów na tym samym poziomie 
+#w razie konieczności do testów: rozwiązanie problemu niewidzących się folderów na tym samym poziomie
 import os
 import sys
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -62,4 +62,3 @@ TESTS_DIR = os.path.join(PROJECT_ROOT, 'tests')
 sys.path.insert(0, SRC_DIR)
 sys.path.insert(0, SCRIPTS_DIR)
 sys.path.insert(0, TESTS_DIR)
-		

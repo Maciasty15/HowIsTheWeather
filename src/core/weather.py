@@ -1,1 +1,1 @@
-#TODO: Obsługa komunikacji z api pogodowym
+# TODO: Obsługa komunikacji z api pogodowym
