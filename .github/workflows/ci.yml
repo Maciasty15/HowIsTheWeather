@@ -38,10 +38,10 @@ jobs:
           uv venv install
 
       - name: Run pre-commit
-        run: uv pip run pre-commit run --all-files
+        run: pre-commit run --all-files
 
       - name: Run Ruff
-        run: uv pip run ruff .
+        run: ruff .
 
       - name: Run Pytest
-        run: uv pip run pytest
+        run: pytest

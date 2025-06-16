@@ -1,4 +1,4 @@
-from src.services.weatherapi import get_coordinates, get_weather
+from services.weatherapi import get_coordinates, get_weather
 import os
 from dotenv import load_dotenv
 from unittest.mock import patch, Mock
