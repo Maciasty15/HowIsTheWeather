@@ -206,6 +206,7 @@ dependencies = [
     { name = "dash" },
     { name = "google-genai" },
     { name = "pre-commit" },
+    { name = "pyright" },
     { name = "pytest" },
     { name = "python-dotenv" },
     { name = "requests-mock" },
@@ -218,6 +219,7 @@ requires-dist = [
     { name = "dash", specifier = ">=3.0.4" },
     { name = "google-genai", specifier = ">=1.19.0" },
     { name = "pre-commit", specifier = ">=4.2.0" },
+    { name = "pyright", specifier = ">=1.1.402" },
     { name = "pytest", specifier = ">=8.4.0" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "requests-mock", specifier = ">=1.12.1" },
@@ -495,6 +497,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/7c/2d/c3338d48ea6cc0feb8446d8e6937e1408088a72a39937982cc6111d17f84/pygments-2.19.1.tar.gz", hash = "sha256:61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f", size = 4968581 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8a/0b/9fcc47d19c48b59121088dd6da2488a49d5f72dacf8262e2790a1d2c7d15/pygments-2.19.1-py3-none-any.whl", hash = "sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c", size = 1225293 },
+]
+
+[[package]]
+name = "pyright"
+version = "1.1.402"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "nodeenv" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/aa/04/ce0c132d00e20f2d2fb3b3e7c125264ca8b909e693841210534b1ea1752f/pyright-1.1.402.tar.gz", hash = "sha256:85a33c2d40cd4439c66aa946fd4ce71ab2f3f5b8c22ce36a623f59ac22937683", size = 3888207 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/37/1a1c62d955e82adae588be8e374c7f77b165b6cb4203f7d581269959abbc/pyright-1.1.402-py3-none-any.whl", hash = "sha256:2c721f11869baac1884e846232800fe021c33f1b4acb3929cff321f7ea4e2982", size = 5624004 },
 ]
 
 [[package]]
