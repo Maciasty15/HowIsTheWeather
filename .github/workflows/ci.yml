@@ -37,11 +37,8 @@ jobs:
         run: |
           uv venv install
 
-      - name: Run pre-commit
-        run: pre-commit run --all-files
+      - name: Run Pytest
+        run: pytest --cov --cov-report=xml
 
       - name: Run Ruff
-        run: ruff .
-
-      - name: Run Pytest
-        run: pytest
+        run: ruff
