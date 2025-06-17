@@ -6,9 +6,9 @@ from dash import ctx
 app = dash.Dash(__name__)
 
 # Przechowywanie danych testowych
-app.layout_store = dcc.Store(id="store-weather", data={})
-app.layout_air = dcc.Store(id="store-air", data={})
-app.layout_ai = dcc.Store(id="store-gemini", data="")
+# app.layout_store = dcc.Store(id="store-weather", data={})
+# app.layout_air = dcc.Store(id="store-air", data={})
+# app.layout_ai = dcc.Store(id="store-gemini", data="")
 
 city_ids = [
     "btn-warszawa",
@@ -22,12 +22,12 @@ city_names = ["Warszawa", "Wrocław", "Poznań", "Kraków", "Gdańsk", "Szczecin
 
 app.layout = html.Div(
     [
-        # dcc.Store(id="store-weather", data={}),
-        # dcc.Store(id="store-air", data={}),
-        # dcc.Store(id="store-gemini", data=""),
-        app.layout_store,
-        app.layout_air,
-        app.layout_ai,
+        dcc.Store(id="store-weather", data={}),
+        dcc.Store(id="store-air", data={}),
+        dcc.Store(id="store-gemini", data=""),
+        # app.layout_store,
+        # app.layout_air,
+        # app.layout_ai,
         html.H1("HowIsTheWeather", className="title"),
         html.P(
             """
@@ -257,23 +257,28 @@ def update_ai_text(text):
 
 if __name__ == "__main__":
     # Przykładowe dane testowe
-    app.layout_store.data = {
+ 
+    app.run(debug=True)
+ 
+    layout_store = dcc.Store(id="store-weather", data={
         "temp-c": "22.5 °C",
         "wind-kph": "15.3 km/h",
         "cloud": "45%",
         "rain": "Nie",
-    }
-
-    app.layout_air.data = {
+    })
+ 
+    layout_air = dcc.Store(id="store-air", data={
         "air-co": "0.34",
         "air-no2": "18.5",
         "air-pm2_5": "12.0",
         "air-pm10": "22.7",
-    }
-
-    app.layout_ai.data = "Dzisiaj najlepiej ubrać się lekko i zabrać okulary przeciwsłoneczne. Dobry dzień na spacer."
-
-    app.run(debug=True)
-
-
-# dodatkowy tekst
+    })
+ 
+    layout_ai = dcc.Store(id="store-ai", data="Dzisiaj najlepiej ubrać się lekko i zabrać okulary przeciwsłoneczne. Dobry dzień na spacer.")
+ 
+    app.layout = html.Div([
+        layout_store,
+        layout_air,
+        layout_ai,
+        html.H1("Pogodowa aplikacja AI"),
+    ])
