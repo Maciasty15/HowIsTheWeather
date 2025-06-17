@@ -90,7 +90,7 @@ def show_selected_city(*args):
     city = city_map.get(triggered, None)
     if city:
         print(f"[INFO] Wybrano miasto: {city}")
-    return f"Wybrane miasto: {city}" if city else ""f"Wybrane miasto: {city}" if city else ""
+    return f"Wybrane miasto: {city}" if city else ""
 
 @app.callback(
     Output("confirmed-datetime", "children"),
@@ -105,7 +105,6 @@ def show_confirmed_datetime(n_clicks, date, hour, minute):
         m = f"{int(minute):02d}" if minute is not None else "--"
         print(f"[INFO] Wybrano datę i godzinę: {date} {h}:{m}")
         return f"Wybrana data i godzina: {date} {h}:{m}"
-    return ""f"Wybrana data i godzina: {date} {h}:{m}"
     return ""
 
 if __name__ == '__main__':
