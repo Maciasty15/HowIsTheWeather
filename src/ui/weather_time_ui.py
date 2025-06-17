@@ -1,8 +1,12 @@
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output, State
+from dash import ctx
 
 app = dash.Dash(__name__)
+
+city_ids = ["btn-warszawa", "btn-wrocław", "btn-poznań", "btn-kraków", "btn-gdańsk", "btn-szczecin"]
+city_names = ["Warszawa", "Wrocław", "Poznań", "Kraków", "Gdańsk", "Szczecin"]
 
 app.layout = html.Div([
     html.H1("HowIsTheWeather", className="title"),
@@ -17,9 +21,11 @@ app.layout = html.Div([
 
     html.H2("Wybierz miasto", className="section-title"),
     html.Div([
-        html.Button(city, id=f"btn-{city.lower()}", className="city-button")
-        for city in ["Warszawa", "Wrocław", "Poznań", "Kraków", "Gdańsk", "Szczecin"]
+        html.Button(city, id=btn_id, className="city-button")
+        for city, btn_id in zip(city_names, city_ids)
     ], className="city-button-container"),
+
+    html.Div(id="selected-city", style={"marginTop": "10px", "textAlign": "center"}),
 
     html.Br(),
 
@@ -46,9 +52,12 @@ app.layout = html.Div([
                 min=0,
                 max=59,
                 className="time-input"
-            )
+            ),
+            html.Button("Zatwierdź datę i czas", id="confirm-time", className="confirm-button")
         ], className="time-input-group")
     ], className="datetime-section"),
+
+    html.Div(id="confirmed-datetime", style={"marginTop": "10px", "textAlign": "center"}),
 
     html.H2("Twoja Prognoza Pogody", className="section-title"),
     html.Div([
@@ -72,36 +81,32 @@ app.layout = html.Div([
 ])
 
 @app.callback(
-    Output("temp-c", "children"),
-    Output("wind-kph", "children"),
-    Output("cloud", "children"),
-    Output("rain", "children"),
-    Output("air-co", "children"),
-    Output("air-no2", "children"),
-    Output("air-pm2_5", "children"),
-    Output("air-pm10", "children"),
-    Input("btn-warszawa", "n_clicks"),
-    Input("btn-wrocław", "n_clicks"),
-    Input("btn-poznań", "n_clicks"),
-    Input("btn-kraków", "n_clicks"),
-    Input("btn-gdańsk", "n_clicks"),
-    Input("btn-szczecin", "n_clicks"),
+    Output("selected-city", "children"),
+    [Input(btn_id, "n_clicks") for btn_id in city_ids]
+)
+def show_selected_city(*args):
+    triggered = ctx.triggered_id
+    city_map = dict(zip(city_ids, city_names))
+    city = city_map.get(triggered, None)
+    if city:
+        print(f"[INFO] Wybrano miasto: {city}")
+    return f"Wybrane miasto: {city}" if city else ""f"Wybrane miasto: {city}" if city else ""
+
+@app.callback(
+    Output("confirmed-datetime", "children"),
+    Input("confirm-time", "n_clicks"),
     State("date-picker", "date"),
     State("hour-input", "value"),
     State("minute-input", "value")
 )
-def update_forecast(*args):
-    # Tu będzie logika np. pobrania z API na podstawie args[-3:] (data, godzina, minuta)
-    return [
-        "222.4°C",
-        "12.5 km/h",
-        "40%",
-        "Tak",
-        "0.33",
-        "18.2",
-        "10.1",
-        "20.4"
-    ]
+def show_confirmed_datetime(n_clicks, date, hour, minute):
+    if n_clicks:
+        h = f"{int(hour):02d}" if hour is not None else "--"
+        m = f"{int(minute):02d}" if minute is not None else "--"
+        print(f"[INFO] Wybrano datę i godzinę: {date} {h}:{m}")
+        return f"Wybrana data i godzina: {date} {h}:{m}"
+    return ""f"Wybrana data i godzina: {date} {h}:{m}"
+    return ""
 
 if __name__ == '__main__':
     app.run(debug=True)
