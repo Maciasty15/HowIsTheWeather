@@ -16,8 +16,3 @@ class App:
         logger.debug("Uruchamiam logikę aplikacji")
         # TODO Tu będzie uruchamianie logiki aplikacji poprzez integracje z src/core/engine.py
 
-
-#DEBUG!!!:
-from src.ui import index
-
-app.run()
