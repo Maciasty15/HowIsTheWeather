@@ -183,7 +183,7 @@ app.layout = html.Div(
 def show_selected_city(*args):
     triggered = ctx.triggered_id
     city_map = dict(zip(city_ids, city_names))
-    city = city_map.get(triggered, None)
+    #city = city_map.get(triggered, None)
     if triggered is not None:
         city = city_map.get(triggered,None)
     else:
