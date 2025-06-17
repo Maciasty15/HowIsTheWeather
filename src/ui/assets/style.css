@@ -11,7 +11,7 @@ body {
 .header-title {
   font-size: 36px;
   color: #2c3e50;
-  text-align: center;
+  text-align: left;
   margin-bottom: 20px;
 }
 
@@ -19,7 +19,7 @@ body {
 .description-text {
   font-size: 18px;
   color: #555;
-  text-align: center;
+  text-align: left;
   margin-bottom: 40px;
 }
 
@@ -32,3 +32,94 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+
+
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.intro-text {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 10px auto;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.city-button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: left;
+}
+
+.city-button {
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.datetime-section {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-top: 20px;
+}
+
+.time-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.time-input {
+  width: 60px;
+  padding: 5px;
+  text-align: center;
+}
+
+.forecast-box, .air-quality-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.ai-suggestion-box {
+  border: 1px solid #ccc;
+  padding: 15px;
+  min-height: 60px;
+  margin: 20px auto;
+  max-width: 800px;
+  background-color: #f9f9f9;
+}
+
+.label {
+  font-weight: 500;
+  margin-right: 1rem; /* lub np. 10px */
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 6px 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.value {
+  font-weight: bold;
+}
+
