@@ -77,7 +77,7 @@ app.layout = html.Div([
 
     html.Br(),
     html.H2("Zalecenia asystenta AI co do ubioru i aktywności", className="section-title"),
-    html.Div("Podpowiedź z Gemini", className="ai-suggestion-box")
+    html.Div(id="ai-suggestion-box", children="Podpowiedź z Gemini", className="ai-suggestion-box")
 ])
 
 @app.callback(
@@ -108,4 +108,5 @@ def show_confirmed_datetime(n_clicks, date, hour, minute):
     return ""
 
 if __name__ == '__main__':
+
     app.run(debug=True)
