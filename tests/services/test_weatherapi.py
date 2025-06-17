@@ -1,4 +1,4 @@
-from services.weatherapi import get_coordinates, get_weather
+from src.services.weatherapi import get_coordinates, get_weather, get_air_quality_metrics
 import os
 from dotenv import load_dotenv
 from unittest.mock import patch, Mock
@@ -150,3 +150,58 @@ class TestGetWeather:
 
         # assert
         assert "Nieznana pogoda" in result
+
+
+class TestGetAirQuality:
+    @patch("services.weatherapi.get_coordinates")
+    @patch("requests.get")
+    def test_get_air_quality_metrics_success(self, mock_get, mock_get_coords):
+        # arrange
+        mock_get_coords.return_value = ("52.23", "21.01")
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_current = Mock()
+        mock_variable = Mock()
+        mock_variable.Value.side_effect = [25.0, 15.0, 500.0, 40.0]  # PM10, PM2.5, CO, NO2
+        mock_current.Variables.return_value = mock_variable
+        mock_response.Current.return_value = mock_current
+        mock_get.return_value = mock_response
+
+        # act
+        result = get_air_quality_metrics("Warszawa")
+
+        # assert
+        assert "Tlenek węgla: 500.0 µg/m³" in result
+        assert "Dwutlenek Azotu: 40.0 µg/m³" in result
+        assert "Pyły zawieszone PM2.5: 15.0 µg/m³" in result
+        assert "Pyły zawieszone PM10: 25.0 µg/m³" in result
+        mock_get.assert_called_once_with(
+            f"{OPENMETO_BASE_URL}air-quality?latitude=52.23&longitude=21.01&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide"
+        )
+
+    @patch("services.weatherapi.get_coordinates")
+    def test_get_air_quality_metrics_invalid_coordinates(self, mock_get_coords):
+        # arrange
+        mock_get_coords.return_value = (None, None)
+
+        # act
+        result = get_air_quality_metrics("Nieistniejące Miasto")
+
+        # assert
+        assert "Nie udało się znaleźć współrzędnych" in result
+
+    @patch("services.weatherapi.get_coordinates")
+    @patch("requests.get")
+    def test_get_air_quality_metrics_api_error(self, mock_get, mock_get_coords):
+        # arrange
+        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_response = Mock()
+        mock_response.status_code = 500
+        mock_get.return_value = mock_response
+
+        # act
+        result = get_air_quality_metrics("Warszawa")
+
+        # assert
+        assert "Nie udało się pobrać danych pogodowych" in result

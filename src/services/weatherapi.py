@@ -64,3 +64,27 @@ def get_weather(location) -> str:
             return "Nie udało się pobrać danych pogodowych."
     else:
         return "Błąd przy pobieraniu danych pogodowych."
+
+def get_air_quality_metrics(location):
+    lat, lon = get_coordinates(location)
+    if lat is None or lon is None:
+        return "Nie udało się znaleźć współrzędnych dla podanej lokalizacji." 
+        
+    url = (
+        f"{OPENMETO_BASE_URL}air-quality"
+        f"?latitude={lat}&longitude={lon}"
+        f"&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide"
+    )
+    response = requests.get(url)
+    if response.status_code == 200:
+        current = response.Current()
+        current_pm10 = current.Variables(0).Value()
+        current_pm2_5 = current.Variables(1).Value()
+        current_carbon_monoxide = current.Variables(2).Value()
+        current_nitrogen_dioxide = current.Variables(3).Value()
+        
+        
+        return f"Tlenek węgla: {current_carbon_monoxide} µg/m³, Dwutlenek Azotu: {current_nitrogen_dioxide} µg/m³, Pyły zawieszone PM2.5: {current_pm2_5} µg/m³, Pyły zawieszone PM10: {current_pm10} µg/m³"
+    else:
+        return "Nie udało się pobrać danych pogodowych."
+
