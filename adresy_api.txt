@@ -1,3 +1,5 @@
 https://open-meteo.com/
 
 https://www.weatherapi.com/
+
+https://api.gios.gov.pl/pjp-api/swagger-ui/#/
