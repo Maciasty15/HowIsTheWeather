@@ -22,6 +22,9 @@ city_names = ["Warszawa", "Wrocław", "Poznań", "Kraków", "Gdańsk", "Szczecin
 
 app.layout = html.Div(
     [
+        # dcc.Store(id="store-weather", data={}),
+        # dcc.Store(id="store-air", data={}),
+        # dcc.Store(id="store-gemini", data=""),
         app.layout_store,
         app.layout_air,
         app.layout_ai,
@@ -181,6 +184,10 @@ def show_selected_city(*args):
     triggered = ctx.triggered_id
     city_map = dict(zip(city_ids, city_names))
     city = city_map.get(triggered, None)
+    if triggered is not None:
+        city = city_map.get(triggered,None)
+    else:
+        city = None
     if city:
         print(f"[INFO] Wybrano miasto: {city}")
     return f"Wybrane miasto: {city}" if city else ""
@@ -269,4 +276,4 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-#dodatkowy tekst
+# dodatkowy tekst
