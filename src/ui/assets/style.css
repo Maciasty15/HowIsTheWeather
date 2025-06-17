@@ -1,0 +1,34 @@
+/* assets/style.css */
+
+/* Ogólne ustawienia strony */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 20px;
+}
+
+/* Nagłówek */
+.header-title {
+  font-size: 36px;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Opis pod nagłówkiem */
+.description-text {
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Kontener na wykres z efektem karty */
+.graph-container {
+  margin: 0 auto;
+  max-width: 800px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
