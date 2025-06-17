@@ -59,10 +59,10 @@ app.layout = html.Div([
 
     html.H2("Jakość powietrza na dzień prognozy", className="section-title"),
     html.Div([
-        html.Div([html.P("Dwutlenek Węgla w ug/m3"), html.Div('"air_quality": co')]),
-        html.Div([html.P("Dwutlenek Azotu ug/m3"), html.Div('"air_quality": no2')]),
-        html.Div([html.P("Pyły zawieszone PM2.5 ug/m3"), html.Div('"air_quality": pm2_5')]),
-        html.Div([html.P("Pyły zawieszone PM10 ug/m3"), html.Div('"air_quality": pm10')])
+        html.Div([html.Span("Tlenek Węgla w ug/m3", className="label"), html.Span(id="air-co", children="0.21", className="value")], className="row"),
+        html.Div([html.Span("Dwutlenek Azotu ug/m3", className="label"), html.Span(id="air-no2", children="14.5", className="value")], className="row"),
+        html.Div([html.Span("Pyły zawieszone PM2.5 ug/m3", className="label"), html.Span(id="air-pm2_5", children="8.9", className="value")], className="row"),
+        html.Div([html.Span("Pyły zawieszone PM10 ug/m3", className="label"), html.Span(id="air-pm10", children="18.2", className="value")], className="row")
     ], className="air-quality-box"),
 
     html.Br(),
