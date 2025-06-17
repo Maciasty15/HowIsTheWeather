@@ -1,0 +1,62 @@
+0: Bezchmurnie
+Aktywności: spacer w parku, jazda na rowerze, piknik nad jeziorem.
+
+Ubiór: koszulka, okulary przeciwsłoneczne, krem z filtrem.
+
+Porada: pij dużo wody, unikaj pełnego słońca w południe.
+
+1: Głównie bezchmurnie
+Aktywności: bieganie, czytanie książki na zewnątrz, gra w tenisa.
+
+Ubiór: lekki strój sportowy, czapka z daszkiem.
+
+Porada: nadal korzystaj z filtra UV.
+
+2: Częściowe zachmurzenie
+Aktywności: wycieczka do zoo, fotografowanie przyrody, kawiarnia z tarasem.
+
+Ubiór: bluza lub lekka kurtka.
+
+Porada: możliwe szybkie zmiany pogody – zabierz parasol.
+
+3: Zachmurzenie duże
+Aktywności: kino, muzeum, domowe gotowanie z rodziną.
+
+Ubiór: cieplejszy sweter, kurtka.
+
+Porada: sprawdzaj pogodę na później – możliwe opady.
+
+45/48: Mgła / Osadzająca się mgła
+Aktywności: joga w domu, biblioteka, gra planszowa z przyjaciółmi.
+
+Ubiór: odblaskowe elementy, ciepła odzież.
+
+Porada: ograniczona widoczność – zachowaj ostrożność na drogach.
+
+51/53/55: Mżawka
+Aktywności: zakupy w galerii, siłownia, zwiedzanie pod zadaszeniem.
+
+Ubiór: wodoodporna kurtka, buty nieprzemakalne.
+
+Porada: miej przy sobie parasol lub pelerynę.
+
+61/63/65: Deszcz
+Aktywności: kino, centrum nauki, domowy wieczór filmowy.
+
+Ubiór: płaszcz przeciwdeszczowy, kalosze.
+
+Porada: unikaj dużych kałuż, zabezpiecz elektronikę.
+
+71/73/75: Śnieg
+Aktywności: lepienie bałwana, sanki, herbata przy kominku.
+
+Ubiór: ciepła kurtka, czapka, rękawiczki.
+
+Porada: uważaj na oblodzenia, zakładaj warstwowo.
+
+95: Burza
+Aktywności: czytanie książki, planszówki, gotowanie w domu.
+
+Ubiór: pozostań w domu – nie wychodź, jeśli nie musisz.
+
+Porada: unikaj korzystania z urządzeń elektrycznych, nie parkuj pod drzewami.
