@@ -267,3 +267,4 @@ if __name__ == "__main__":
     app.layout_ai.data = "Dzisiaj najlepiej ubrać się lekko i zabrać okulary przeciwsłoneczne. Dobry dzień na spacer."
 
     app.run(debug=True)
+
