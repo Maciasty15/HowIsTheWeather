@@ -1,7 +1,8 @@
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output, State
-#from dash import ctx
+
+# from dash import ctx
 from src.services.weatherapi import get_air_quality_metrics, get_weather
 
 app = dash.Dash(__name__)
@@ -184,7 +185,7 @@ app.layout = html.Div(
 # return odpowiednia_logika_ustawiania_danych
 
 def show_selected_city(*args):
-    #ctx = dash.callback_context
+    # ctx = dash.callback_context
     triggered = ctx.triggered_id
 
     city_map = dict(zip(city_ids, city_names))
