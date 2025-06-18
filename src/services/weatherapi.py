@@ -47,8 +47,8 @@ def get_weather(location, datetime_str=None):
 
     # Weather codes mapping
     weather_codes = {
-        0: "Bezchmurnie",
-        1: "Głównie bezchmurnie",
+        #0: "Bezchmurnie",
+        #1: "Głównie bezchmurnie",
         2: "Częściowe zachmurzenie",
         3: "Zachmurzenie duże",
         45: "Mgła",
