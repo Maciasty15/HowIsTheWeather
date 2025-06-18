@@ -97,6 +97,7 @@ app.layout = html.Div([
     # from services.weatherapi import WeatherFetcher
     # weather_data, air_data = WeatherFetcher().fetch_by_city(city)
     # return odpowiednia_logika_ustawiania_danych
+
 def show_selected_city(*args):
     triggered = ctx.triggered_id
     city_map = dict(zip(city_ids, city_names))
@@ -117,6 +118,9 @@ def show_selected_city(*args):
     # from services.weatherapi import WeatherFetcher
     # weather_data, air_data = WeatherFetcher().fetch_by_datetime(date, hour, minute)
     # return odpowiednia_logika_ustawiania_danych
+
+from services.weatherapi import get_coordinates, get_air_quality_metrics
+
 def show_confirmed_datetime(n_clicks, date, hour, minute):
     if n_clicks:
         h = f"{int(hour):02d}" if hour is not None else "--"
@@ -153,11 +157,12 @@ def update_weather_ui(data):
     Input("store-air", "data")
 )
 def update_air_ui(data):
+    df = get_air_quality_metrics(city)
     return (
-        data.get("air-co", "--"),
-        data.get("air-no2", "--"),
-        data.get("air-pm2_5", "--"),
-        data.get("air-pm10", "--")
+        data.get("air-co", df[2]),
+        data.get("air-no2", df[3]),
+        data.get("air-pm2_5", df[1]),
+        data.get("air-pm10", df[0])
     )
 
 

@@ -84,7 +84,7 @@ def get_air_quality_metrics(location):
         current_nitrogen_dioxide = current.Variables(3).Value()
         
         
-        return f"Tlenek węgla: {current_carbon_monoxide} µg/m³, Dwutlenek Azotu: {current_nitrogen_dioxide} µg/m³, Pyły zawieszone PM2.5: {current_pm2_5} µg/m³, Pyły zawieszone PM10: {current_pm10} µg/m³"
+        return [current_pm10, current_pm2_5, current_carbon_monoxide, current_nitrogen_dioxide] 
     else:
         return "Nie udało się pobrać danych pogodowych."
 
