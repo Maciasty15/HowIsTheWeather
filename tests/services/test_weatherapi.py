@@ -172,10 +172,9 @@ class TestGetAirQuality:
         result = get_air_quality_metrics("Warszawa")
 
         # assert
-        assert "Tlenek węgla: 500.0 µg/m³" in result
-        assert "Dwutlenek Azotu: 40.0 µg/m³" in result
-        assert "Pyły zawieszone PM2.5: 15.0 µg/m³" in result
-        assert "Pyły zawieszone PM10: 25.0 µg/m³" in result
+        assert isinstance(result, list)
+        assert len(result) == 4
+        assert result == [25.0, 15.0, 500.0, 40.0]  # PM10, PM2.5, CO, NO2
         mock_get.assert_called_once_with(
             f"{OPENMETO_BASE_URL}air-quality?latitude=52.23&longitude=21.01&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide"
         )
