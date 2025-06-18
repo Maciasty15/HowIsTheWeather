@@ -1,7 +1,7 @@
 """
 Run repezentuje skrypt do uruchamiania calej aplikacji jednym kliknięciem"""
 
-from src.ui.index import run
+from src.ui.weather_time_ui import run
 import logging
 
 logger = logging.getLogger(__name__)

@@ -163,7 +163,12 @@ class TestGetAirQuality:
         mock_response.status_code = 200
         mock_current = Mock()
         mock_variable = Mock()
-        mock_variable.Value.side_effect = [25.0, 15.0, 500.0, 40.0]  # PM10, PM2.5, CO, NO2
+        mock_variable.Value.side_effect = [
+            25.0,
+            15.0,
+            500.0,
+            40.0,
+        ]  # PM10, PM2.5, CO, NO2
         mock_current.Variables.return_value = mock_variable
         mock_response.Current.return_value = mock_current
         mock_get.return_value = mock_response
