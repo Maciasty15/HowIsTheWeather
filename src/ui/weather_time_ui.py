@@ -1,7 +1,9 @@
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output, State
+
 from dash import ctx
+from src.services.weatherapi import get_air_quality_metrics, get_weather
 
 app = dash.Dash(__name__)
 
@@ -9,6 +11,8 @@ app = dash.Dash(__name__)
 # app.layout_store = dcc.Store(id="store-weather", data={})
 # app.layout_air = dcc.Store(id="store-air", data={})
 # app.layout_ai = dcc.Store(id="store-gemini", data="")
+# app.layout_city = dcc.Store(id="store-city", data="")  # New store for selected city
+# app.layout_datetime = dcc.Store(id="store-datetime", data="")  # Store for selected datetime
 
 city_ids = [
     "btn-warszawa",
@@ -25,9 +29,8 @@ app.layout = html.Div(
         dcc.Store(id="store-weather", data={}),
         dcc.Store(id="store-air", data={}),
         dcc.Store(id="store-gemini", data=""),
-        # app.layout_store,
-        # app.layout_air,
-        # app.layout_ai,
+        dcc.Store(id="store-city", data=""),
+        dcc.Store(id="store-datetime", data=""),  # Add the datetime store to the layout
         html.H1("HowIsTheWeather", className="title"),
         html.P(
             """
@@ -172,7 +175,7 @@ app.layout = html.Div(
 
 
 @app.callback(
-    Output("selected-city", "children"),
+    [Output("selected-city", "children"), Output("store-city", "data")],
     [Input(btn_id, "n_clicks") for btn_id in city_ids],
 )
 # TODO: Tutaj dodaj połączenie z klasą API, która pobierze dane pogodowe i jakości powietrza na podstawie miasta
@@ -180,38 +183,44 @@ app.layout = html.Div(
 # from services.weatherapi import WeatherFetcher
 # weather_data, air_data = WeatherFetcher().fetch_by_city(city)
 # return odpowiednia_logika_ustawiania_danych
+
 def show_selected_city(*args):
+    # ctx = dash.callback_context
     triggered = ctx.triggered_id
+
     city_map = dict(zip(city_ids, city_names))
-    # city = city_map.get(triggered, None)
+
     if triggered is not None:
         city = city_map.get(triggered, None)
     else:
         city = None
+
     if city:
         print(f"[INFO] Wybrano miasto: {city}")
-    return f"Wybrane miasto: {city}" if city else ""
+        return f"Wybrane miasto: {city}", {"city": city}
+    else:
+        return "", {}
 
 
 @app.callback(
-    Output("confirmed-datetime", "children"),
+    [Output("confirmed-datetime", "children"), Output("store-datetime", "data")],
     Input("confirm-time", "n_clicks"),
     State("date-picker", "date"),
     State("hour-input", "value"),
     State("minute-input", "value"),
 )
-# TODO: Tutaj dodaj połączenie z klasą API, która zaktualizuje dane pogodowe i jakości powietrza dla wybranej daty i godziny
-# Przykład:
-# from services.weatherapi import WeatherFetcher
-# weather_data, air_data = WeatherFetcher().fetch_by_datetime(date, hour, minute)
-# return odpowiednia_logika_ustawiania_danych
 def show_confirmed_datetime(n_clicks, date, hour, minute):
-    if n_clicks:
-        h = f"{int(hour):02d}" if hour is not None else "--"
-        m = f"{int(minute):02d}" if minute is not None else "--"
-        print(f"[INFO] Wybrano datę i godzinę: {date} {h}:{m}")
-        return f"Wybrana data i godzina: {date} {h}:{m}"
-    return ""
+    if not n_clicks:  # Initial load or reset
+        return "", None
+
+    if not all([date, hour is not None, minute is not None]):  # If any value is missing
+        return "Proszę wybrać datę i godzinę", None
+
+    h = f"{int(hour):02d}"
+    m = f"{int(minute):02d}"
+    datetime_str = f"{date}T{h}:{m}"
+    print(f"[INFO] Wybrano datę i godzinę: {datetime_str}")
+    return f"Wybrana data i godzina: {date} {h}:{m}", datetime_str
 
 
 @app.callback(
@@ -221,14 +230,24 @@ def show_confirmed_datetime(n_clicks, date, hour, minute):
         Output("cloud", "children"),
         Output("rain", "children"),
     ],
-    Input("store-weather", "data"),
+    [Input("store-city", "data"), Input("store-datetime", "data")],
 )
-def update_weather_ui(data):
+def update_weather_ui(selected_city, selected_datetime):
+    if not selected_city:  # Only check if city is not selected
+        return "--", "--", "--", "--"
+
+    # Pass datetime only if it's selected, otherwise get current values
+    city = selected_city["city"] if isinstance(selected_city, dict) else selected_city
+    weather_data = get_weather(city, selected_datetime if selected_datetime else None)
+
+    if weather_data is None:
+        return "--", "--", "--", "--"
+
     return (
-        data.get("temp-c", "--"),
-        data.get("wind-kph", "--"),
-        data.get("cloud", "--"),
-        data.get("rain", "--"),
+        weather_data.get("temp-c", "--"),
+        weather_data.get("wind-kph", "--"),
+        weather_data.get("cloud", "--"),
+        weather_data.get("rain", "--"),
     )
 
 
@@ -239,15 +258,18 @@ def update_weather_ui(data):
         Output("air-pm2_5", "children"),
         Output("air-pm10", "children"),
     ],
-    Input("store-air", "data"),
+    [Input("store-city", "data"), Input("store-datetime", "data")],
 )
-def update_air_ui(data):
-    return (
-        data.get("air-co", "--"),
-        data.get("air-no2", "--"),
-        data.get("air-pm2_5", "--"),
-        data.get("air-pm10", "--"),
-    )
+def update_air_ui(selected_city, selected_datetime):
+    if not selected_city:  # Only check if city is not selected
+        return "--", "--", "--", "--"
+
+    # Pass datetime only if it's selected, otherwise get current values
+    city = selected_city["city"] if isinstance(selected_city, dict) else selected_city
+
+    # Pass datetime only if it's selected, otherwise get current values
+    df = get_air_quality_metrics(city, selected_datetime if selected_datetime else None)
+    return df[2], df[3], df[1], df[0]
 
 
 @app.callback(Output("ai-suggestion-box", "children"), Input("store-gemini", "data"))
@@ -255,41 +277,6 @@ def update_ai_text(text):
     return text or "Podpowiedź z Gemini"
 
 
-if __name__ == "__main__":
-    # Przykładowe dane testowe
-
+# Funkcja do uruchamiania serwer
+def run():
     app.run(debug=True)
-
-    layout_store = dcc.Store(
-        id="store-weather",
-        data={
-            "temp-c": "22.5 °C",
-            "wind-kph": "15.3 km/h",
-            "cloud": "45%",
-            "rain": "Nie",
-        },
-    )
-
-    layout_air = dcc.Store(
-        id="store-air",
-        data={
-            "air-co": "0.34",
-            "air-no2": "18.5",
-            "air-pm2_5": "12.0",
-            "air-pm10": "22.7",
-        },
-    )
-
-    layout_ai = dcc.Store(
-        id="store-ai",
-        data="Dzisiaj najlepiej ubrać się lekko i zabrać okulary przeciwsłoneczne. Dobry dzień na spacer.",
-    )
-
-    app.layout = html.Div(
-        [
-            layout_store,
-            layout_air,
-            layout_ai,
-            html.H1("Pogodowa aplikacja AI"),
-        ]
-    )
