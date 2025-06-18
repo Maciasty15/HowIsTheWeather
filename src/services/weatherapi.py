@@ -46,24 +46,24 @@ def get_weather(location, datetime_str=None):
         return None
 
     # Weather codes mapping
-    weather_codes = {
-        # 0: "Bezchmurnie",
-        # 1: "Głównie bezchmurnie",
-        2: "Częściowe zachmurzenie",
-        3: "Zachmurzenie duże",
-        45: "Mgła",
-        48: "Osadzająca się mgła",
-        51: "Lekka mżawka",
-        53: "Umiarkowana mżawka",
-        55: "Gęsta mżawka",
-        61: "Lekki deszcz",
-        63: "Umiarkowany deszcz",
-        65: "Silny deszcz",
-        71: "Lekki śnieg",
-        73: "Umiarkowany śnieg",
-        75: "Gęsty śnieg",
-        95: "Burza",
-    }
+    # weather_codes = {
+    # 0: "Bezchmurnie",
+    # 1: "Głównie bezchmurnie",
+    # 2: "Częściowe zachmurzenie",
+    # 3: "Zachmurzenie duże",
+    # 45: "Mgła",
+    # 48: "Osadzająca się mgła",
+    # 51: "Lekka mżawka",
+    # 53: "Umiarkowana mżawka",
+    # 55: "Gęsta mżawka",
+    # 61: "Lekki deszcz",
+    # 63: "Umiarkowany deszcz",
+    # 65: "Silny deszcz",
+    # 71: "Lekki śnieg",
+    # 73: "Umiarkowany śnieg",
+    # 75: "Gęsty śnieg",
+    # 95: "Burza",
+    # }
 
     url = (
         "https://api.open-meteo.com/v1/forecast"

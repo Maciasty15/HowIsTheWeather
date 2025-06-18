@@ -2,7 +2,7 @@ import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output, State
 
-# from dash import ctx
+from dash import ctx
 from src.services.weatherapi import get_air_quality_metrics, get_weather
 
 app = dash.Dash(__name__)
