@@ -1,13 +1,16 @@
 FROM python:3.11-slim
 
+RUN mkdir /app
+COPY pyproject.toml /app
+COPY uv.lock /app
 WORKDIR /app
 
-COPY . .
+RUN pip install uv
 
-RUN python -m venv .venv \
- && .venv/bin/pip install --upgrade pip \
- && .venv/bin/pip install uv \
- && .venv/bin/uv sync
+RUN uv sync
+
+COPY . /app
+
 
 ENV PATH="/app/.venv/bin:$PATH"
 
