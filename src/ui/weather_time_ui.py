@@ -1,18 +1,14 @@
 import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output, State
-
 from dash import ctx
 from src.services.weatherapi import get_air_quality_metrics, get_weather
+from src.core.recommender import get_recommendation
+import datetime
+
+now = datetime.datetime.now()
 
 app = dash.Dash(__name__)
-
-# Przechowywanie danych testowych
-# app.layout_store = dcc.Store(id="store-weather", data={})
-# app.layout_air = dcc.Store(id="store-air", data={})
-# app.layout_ai = dcc.Store(id="store-gemini", data="")
-# app.layout_city = dcc.Store(id="store-city", data="")  # New store for selected city
-# app.layout_datetime = dcc.Store(id="store-datetime", data="")  # Store for selected datetime
 
 city_ids = [
     "btn-warszawa",
@@ -58,7 +54,10 @@ app.layout = html.Div(
             [
                 html.P("Wybierz datę i godzinę", className="section-title"),
                 dcc.DatePickerSingle(
-                    id="date-picker", date="2025-06-16", className="date-picker"
+                    id="date-picker",
+                    date=now.today(),
+                    display_format="YYYY-MM-DD",
+                    className="date-picker",
                 ),
                 html.Div(
                     [
@@ -68,6 +67,7 @@ app.layout = html.Div(
                             placeholder="HH",
                             min=0,
                             max=23,
+                            value=now.hour,
                             className="time-input",
                         ),
                         dcc.Input(
@@ -76,6 +76,7 @@ app.layout = html.Div(
                             placeholder="MM",
                             min=0,
                             max=59,
+                            value=now.minute,
                             className="time-input",
                         ),
                         html.Button(
@@ -165,9 +166,8 @@ app.layout = html.Div(
             "Zalecenia asystenta AI co do ubioru i aktywności",
             className="section-title",
         ),
-        html.Div(
+        dcc.Markdown(
             id="ai-suggestion-box",
-            children="Podpowiedź z Gemini",
             className="ai-suggestion-box",
         ),
     ]
@@ -229,25 +229,27 @@ def show_confirmed_datetime(n_clicks, date, hour, minute):
         Output("wind-kph", "children"),
         Output("cloud", "children"),
         Output("rain", "children"),
+        Output("store-weather", "data"),
     ],
     [Input("store-city", "data"), Input("store-datetime", "data")],
 )
 def update_weather_ui(selected_city, selected_datetime):
     if not selected_city:  # Only check if city is not selected
-        return "--", "--", "--", "--"
+        return "--", "--", "--", "--", {}
 
     # Pass datetime only if it's selected, otherwise get current values
     city = selected_city["city"] if isinstance(selected_city, dict) else selected_city
     weather_data = get_weather(city, selected_datetime if selected_datetime else None)
 
     if weather_data is None:
-        return "--", "--", "--", "--"
+        return "--", "--", "--", "--", {}
 
     return (
         weather_data.get("temp-c", "--"),
         weather_data.get("wind-kph", "--"),
         weather_data.get("cloud", "--"),
         weather_data.get("rain", "--"),
+        weather_data,
     )
 
 
@@ -257,24 +259,65 @@ def update_weather_ui(selected_city, selected_datetime):
         Output("air-no2", "children"),
         Output("air-pm2_5", "children"),
         Output("air-pm10", "children"),
+        Output("store-air", "data"),
     ],
     [Input("store-city", "data"), Input("store-datetime", "data")],
 )
 def update_air_ui(selected_city, selected_datetime):
     if not selected_city:  # Only check if city is not selected
-        return "--", "--", "--", "--"
+        return "--", "--", "--", "--", {}
 
     # Pass datetime only if it's selected, otherwise get current values
     city = selected_city["city"] if isinstance(selected_city, dict) else selected_city
 
     # Pass datetime only if it's selected, otherwise get current values
     df = get_air_quality_metrics(city, selected_datetime if selected_datetime else None)
-    return df[2], df[3], df[1], df[0]
+
+    air_data = {
+        "pm10": df[0],
+        "pm2_5": df[1],
+        "co": df[2],
+        "no2": df[3],
+    }
+
+    return df[2], df[3], df[1], df[0], air_data
 
 
-@app.callback(Output("ai-suggestion-box", "children"), Input("store-gemini", "data"))
-def update_ai_text(text):
-    return text or "Podpowiedź z Gemini"
+@app.callback(
+    Output("ai-suggestion-box", "children"),
+    [
+        Input("store-weather", "data"),
+        Input("store-city", "data"),
+        Input("store-air", "data"),
+    ],
+)
+def generate_ai_recommendation(weather_data, selected_city, air_data):
+    if not weather_data or not selected_city:
+        return "Podpowiedź z Gemini"
+
+    location = selected_city.get("city", "nieznana lokalizacja")
+
+    weather_parts = [
+        f"Temperatura: {weather_data.get('temp-c', '--')}°C",
+        f"Wiatr: {weather_data.get('wind-kph', '--')} km/h",
+        f"Zachmurzenie: {weather_data.get('cloud', '--')}%",
+        f"Szansa na deszcz: {weather_data.get('rain', '--')}%",
+    ]
+
+    # Budujemy opis jakości powietrza, jeśli dostępny
+    if isinstance(air_data, dict):
+        air_parts = [
+            f"PM2.5: {air_data.get('pm2_5', '--')} µg/m3",
+            f"PM10: {air_data.get('pm10', '--')} µg/m3",
+            f"NO2: {air_data.get('no2', '--')} µg/m3",
+            f"CO: {air_data.get('co', '--')} µg/m3",
+        ]
+    else:
+        air_parts = ["Brak danych o jakości powietrza."]
+
+    full_description = "\n".join(weather_parts + [""] + air_parts)
+
+    return get_recommendation(location, full_description)
 
 
 # Funkcja do uruchamiania serwer

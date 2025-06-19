@@ -16,6 +16,7 @@ def get_recommendation(location, weather_description):
         "- 3 aktywności, które można wykonać na zewnątrz lub w środku opierając się o lokalizacje\n"
         "- Jakie ubranie będzie odpowiednie\n"
         "- Ewentualne porady\n"
+        "Odpowiedź podaj w strukturze Markdown aby ładnie się formatował tekst na stronie.\n"
     )
 
     try:
