@@ -1,8 +1,8 @@
 import dash
 from dash import html, dcc, Input, Output, State
 
-from services.weatherapi import get_weather
-from core.recommender import get_recommendation
+from services.open_meteo_api import get_weather
+from services.recommender import get_recommendation
 
 app = dash.Dash(__name__)
 app.title = "Rekomendacje na podstawie pogody"
