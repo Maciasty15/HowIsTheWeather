@@ -322,4 +322,6 @@ def generate_ai_recommendation(weather_data, selected_city, air_data):
 
 # Funkcja do uruchamiania serwer
 def run():
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")  #dodanie host = 0 0 0 0 dla dockera
+
+
