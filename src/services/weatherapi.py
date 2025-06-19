@@ -7,11 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Stałe API
-OPENMETO_BASE_URL = os.getenv(
-    "WEATHERAPI_API_BASE_URL", "https://air-quality-api.open-meteo.com/"
-)
-GEOCODING_API_URL = "https://geocoding-api.open-meteo.com/v1/"
-
+AIR_QUALITY_BASE_URL = os.getenv("AIR_QUALITY_BASE_URL")
+GEOCODING_BASE_URL = os.getenv("GEOCODING_BASE_URL")
+OPEN_METEO_BASE_URL = os.getenv("OPEN_METEO_BASE_URL")
 
 def get_coordinates(location) -> tuple[str, str] | tuple[None, None]:
     print(f"Original location name: {location}")
@@ -20,7 +18,7 @@ def get_coordinates(location) -> tuple[str, str] | tuple[None, None]:
     encoded_location = urllib.parse.quote(location)
     print(f"URL-encoded location name: {encoded_location}")
 
-    url = f"{GEOCODING_API_URL}search?name={encoded_location}&count=1&format=json"
+    url = f"{GEOCODING_BASE_URL}search?name={encoded_location}&count=1&format=json"
     print(f"Searching coordinates for location: {location}")
     print(f"Using URL: {url}")
     response = requests.get(url)
@@ -66,7 +64,7 @@ def get_weather(location, datetime_str=None):
     # }
 
     url = (
-        "https://api.open-meteo.com/v1/forecast"
+        f"{OPEN_METEO_BASE_URL}forecast"
         f"?latitude={lat}&longitude={lon}"
         f"&hourly=temperature_2m,windspeed_10m,cloudcover,precipitation_probability"
         f"&timezone=Europe/Warsaw"
@@ -138,7 +136,7 @@ def get_air_quality_metrics(location, datetime_str=None):
         return [0, 0, 0, 0]  # Return default values if coordinates not found
 
     url = (
-        f"{OPENMETO_BASE_URL}v1/air-quality"
+        f"{AIR_QUALITY_BASE_URL}/air-quality"
         f"?latitude={lat}&longitude={lon}"
         f"&hourly=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide"
         f"&timezone=Europe/Warsaw"
