@@ -62,3 +62,13 @@ TESTS_DIR = os.path.join(PROJECT_ROOT, 'tests')
 sys.path.insert(0, SRC_DIR)
 sys.path.insert(0, SCRIPTS_DIR)
 sys.path.insert(0, TESTS_DIR)
+
+################
+Docker 
+
+docker build -t howistheweather .
+docker run -p 8050:8050 howistheweather
+http://localhost:8050
+
+docker compose up --build
+docker compose down
