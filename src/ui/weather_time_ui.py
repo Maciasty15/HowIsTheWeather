@@ -2,7 +2,11 @@ import dash
 from dash import html, dcc
 from dash.dependencies import Input, Output, State
 from dash import ctx
-from src.services.weatherapi import get_air_quality_metrics, get_weather
+
+
+#from src.services.weatherapi import get_air_quality_metrics, get_weather
+from src.services.cache import get_weather, get_air_quality_metrics
+
 from src.core.recommender import get_recommendation
 import datetime
 
