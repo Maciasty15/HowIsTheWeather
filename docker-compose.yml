@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  dash-app:
+    build: .
+    container_name: howistheweather
+    ports:
+      - "8050:8050"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
