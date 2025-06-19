@@ -5,8 +5,9 @@ import urllib.parse
 from unittest.mock import patch, Mock, MagicMock
 
 load_dotenv()
-OPENMETO_BASE_URL = os.getenv("WEATHERAPI_API_BASE_URL")
-GEOCODING_API_URL = "https://geocoding-api.open-meteo.com/v1/"
+AIR_QUALITY_BASE_URL = os.getenv("AIR_QUALITY_BASE_URL")
+GEOCODING_BASE_URL = os.getenv("GEOCODING_BASE_URL")
+OPEN_METEO_BASE_URL = os.getenv("OPEN_METEO_BASE_URL")
 
 
 class TestGetCoordinates:
@@ -30,7 +31,7 @@ class TestGetCoordinates:
         assert lat == "52.23"
         assert lon == "21.01"
         mock_get.assert_called_once_with(
-            f"{GEOCODING_API_URL}search?name={encoded_location}&count=1&format=json"
+            f"{GEOCODING_BASE_URL}search?name={encoded_location}&count=1&format=json"
         )
 
     @patch("requests.get")
