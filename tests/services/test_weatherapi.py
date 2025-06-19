@@ -78,7 +78,7 @@ class TestGetWeather:
     @patch("requests.get")
     def test_get_weather_success(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {
@@ -111,7 +111,7 @@ class TestGetWeather:
     @patch("services.open_meteo_api.get_coordinates")
     def test_get_weather_invalid_coordinates(self, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = (None, None)
+        mock_get_coords.return_value = None
 
         # act
         result = get_weather("Nieistniejące Miasto")
@@ -123,7 +123,7 @@ class TestGetWeather:
     @patch("requests.get")
     def test_get_weather_api_error(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
         mock_response = Mock()
         mock_response.status_code = 500
         mock_get.return_value = mock_response
@@ -138,7 +138,7 @@ class TestGetWeather:
     @patch("requests.get")
     def test_get_weather_missing_data(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {}
@@ -154,7 +154,7 @@ class TestGetWeather:
     @patch("requests.get")
     def test_get_weather_edge_rain_probability(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {
@@ -185,7 +185,7 @@ class TestGetAirQuality:
     @patch("services.open_meteo_api.requests.get")
     def test_get_air_quality_metrics_success(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
 
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -203,8 +203,6 @@ class TestGetAirQuality:
         # act
         result = get_air_quality_metrics("Warszawa", "2025-06-18T09:30")
 
-        print(result)
-
         # assert
         assert result == [25.0, 15.0, 500.0, 40.0]
         mock_get.assert_called_once()
@@ -217,7 +215,7 @@ class TestGetAirQuality:
     @patch("services.open_meteo_api.get_coordinates")
     def test_get_air_quality_metrics_invalid_coordinates(self, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = (None, None)
+        mock_get_coords.return_value = None
 
         # act
         result = get_air_quality_metrics("Nieistniejące Miasto")
@@ -229,7 +227,7 @@ class TestGetAirQuality:
     @patch("requests.get")
     def test_get_air_quality_metrics_api_error(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
         mock_response = Mock()
         mock_response.status_code = 500
         mock_get.return_value = mock_response
@@ -244,7 +242,7 @@ class TestGetAirQuality:
     @patch("requests.get")
     def test_get_air_quality_missing_data(self, mock_get, mock_get_coords):
         # arrange
-        mock_get_coords.return_value = ("52.23", "21.01")
+        mock_get_coords.return_value = [{"lat": "52.23", "lon": "21.01"}]
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {}  # brak 'hourly'
