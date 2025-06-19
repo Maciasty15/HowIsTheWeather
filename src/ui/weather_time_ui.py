@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output, State
 from dash import ctx
 
 
-#from src.services.weatherapi import get_air_quality_metrics, get_weather
+# from src.services.weatherapi import get_air_quality_metrics, get_weather
 from src.services.cache import get_weather, get_air_quality_metrics
 
 from src.core.recommender import get_recommendation
@@ -326,6 +326,4 @@ def generate_ai_recommendation(weather_data, selected_city, air_data):
 
 # Funkcja do uruchamiania serwer
 def run():
-    app.run(debug=True, host="0.0.0.0")  #dodanie host = 0 0 0 0 dla dockera
-
-
+    app.run(debug=True, host="0.0.0.0")  # dodanie host = 0 0 0 0 dla dockera

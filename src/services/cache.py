@@ -21,6 +21,7 @@ except redis.ConnectionError:
 WEATHER_TTL = timedelta(minutes=5)
 AIR_TTL = timedelta(minutes=10)
 
+
 # === Pogoda: cache + API fallback ===
 def get_weather(city: str, datetime_str: Optional[str] = None):
     from src.services.weatherapi import get_weather as get_weather_from_api
@@ -38,9 +39,12 @@ def get_weather(city: str, datetime_str: Optional[str] = None):
         redis_client.setex(key, WEATHER_TTL, json.dumps(data))
     return data
 
+
 # === Jakość powietrza: cache + API fallback ===
 def get_air_quality_metrics(city: str, datetime_str: Optional[str] = None):
-    from src.services.weatherapi import get_air_quality_metrics as get_air_quality_metrics_from_api
+    from src.services.weatherapi import (
+        get_air_quality_metrics as get_air_quality_metrics_from_api,
+    )
 
     key = f"air:{city.lower()}:{datetime_str if datetime_str else 'now'}"
     if redis_client:
