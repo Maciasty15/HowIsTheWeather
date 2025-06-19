@@ -34,7 +34,6 @@ class TestGetCoordinates:
         mock_get.return_value = mock_response
 
         location = "Warszawa"
-        encoded_location = urllib.parse.quote(location)
 
         # act
         results = get_coordinates(location)

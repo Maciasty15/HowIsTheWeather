@@ -1,14 +1,12 @@
 # src/core/callbacks.py
-from dash import Input, Output, State, ctx, html, ALL
+from dash import Input, Output, State, ctx
 from src.services.open_meteo_api import (
     get_weather,
     get_air_quality_metrics,
     get_coordinates,
 )
 from src.services.recommender import get_recommendation
-from src.services.country_api import get_countries
 import json
-import re
 
 
 def register_callbacks(app):
