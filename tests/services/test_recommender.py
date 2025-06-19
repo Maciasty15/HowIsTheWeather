@@ -1,5 +1,8 @@
 from unittest.mock import patch, Mock
 from services.recommender import get_recommendation
+import os
+
+os.environ["AI_GEMINI_KEY"] = "fake-key"
 
 
 @patch("services.recommender.client.models.generate_content")
