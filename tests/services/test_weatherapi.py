@@ -1,4 +1,8 @@
-from services.weatherapi import get_coordinates, get_weather, get_air_quality_metrics
+from services.open_meteo_api import (
+    get_coordinates,
+    get_weather,
+    get_air_quality_metrics,
+)
 import os
 from dotenv import load_dotenv
 import urllib.parse
@@ -65,7 +69,7 @@ class TestGetCoordinates:
 
 
 class TestGetWeather:
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     @patch("requests.get")
     def test_get_weather_success(self, mock_get, mock_get_coords):
         # arrange
@@ -99,7 +103,7 @@ class TestGetWeather:
         assert "longitude=21.01" in called_url
         assert "start_date=2025-06-18" in called_url
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     def test_get_weather_invalid_coordinates(self, mock_get_coords):
         # arrange
         mock_get_coords.return_value = (None, None)
@@ -110,7 +114,7 @@ class TestGetWeather:
         # assert
         assert result is None
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     @patch("requests.get")
     def test_get_weather_api_error(self, mock_get, mock_get_coords):
         # arrange
@@ -125,7 +129,7 @@ class TestGetWeather:
         # assert
         assert result is None
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     @patch("requests.get")
     def test_get_weather_missing_data(self, mock_get, mock_get_coords):
         # arrange
@@ -141,7 +145,7 @@ class TestGetWeather:
         # assert
         assert result is None
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     @patch("requests.get")
     def test_get_weather_edge_rain_probability(self, mock_get, mock_get_coords):
         # arrange
@@ -172,10 +176,8 @@ class TestGetWeather:
 
 
 class TestGetAirQuality:
-    @patch("services.weatherapi.get_coordinates")
-    @patch(
-        "services.weatherapi.requests.get"
-    )  # bardzo ważne: patchujemy dokładnie tam, gdzie jest import requests
+    @patch("services.open_meteo_api.get_coordinates")
+    @patch("services.open_meteo_api.requests.get")
     def test_get_air_quality_metrics_success(self, mock_get, mock_get_coords):
         # arrange
         mock_get_coords.return_value = ("52.23", "21.01")
@@ -207,7 +209,7 @@ class TestGetAirQuality:
         assert "hourly=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide" in called_url
         assert "start_date=2025-06-18" in called_url
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     def test_get_air_quality_metrics_invalid_coordinates(self, mock_get_coords):
         # arrange
         mock_get_coords.return_value = (None, None)
@@ -218,7 +220,7 @@ class TestGetAirQuality:
         # assert
         assert result == [0, 0, 0, 0]
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     @patch("requests.get")
     def test_get_air_quality_metrics_api_error(self, mock_get, mock_get_coords):
         # arrange
@@ -233,7 +235,7 @@ class TestGetAirQuality:
         # assert
         assert result == [0, 0, 0, 0]
 
-    @patch("services.weatherapi.get_coordinates")
+    @patch("services.open_meteo_api.get_coordinates")
     @patch("requests.get")
     def test_get_air_quality_missing_data(self, mock_get, mock_get_coords):
         # arrange
