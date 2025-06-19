@@ -11,6 +11,7 @@ AIR_QUALITY_BASE_URL = os.getenv("AIR_QUALITY_BASE_URL")
 GEOCODING_BASE_URL = os.getenv("GEOCODING_BASE_URL")
 OPEN_METEO_BASE_URL = os.getenv("OPEN_METEO_BASE_URL")
 
+
 def get_coordinates(location) -> tuple[str, str] | tuple[None, None]:
     print(f"Original location name: {location}")
 
