@@ -69,4 +69,6 @@ Docker
 docker build -t howistheweather .
 docker run -p 8050:8050 howistheweather
 http://localhost:8050
+
 docker compose up --build
+docker compose down
