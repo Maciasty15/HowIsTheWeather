@@ -5,7 +5,6 @@ from services.open_meteo_api import (
 )
 import os
 from dotenv import load_dotenv
-import urllib.parse
 from unittest.mock import patch, Mock, MagicMock
 
 load_dotenv()
