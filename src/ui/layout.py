@@ -16,15 +16,15 @@ def create_layout():
             html.H1("HowIsTheWeather", className="title"),
             html.P(
                 """
-    Nasza aplikacja pozwoli ci:
-    - sprawdzić aktualną pogodę
-    - sprawdzić aktualne zanieczyszczenie powietrza
-    - doradzić Ci w kwestii aktywności fizycznej
-    - doradzić Ci w kwestii doboru odpowiedniej odzieży
+    Nasza aplikacja pozwoli Ci:
+    🌞 sprawdzić aktualną pogodę
+    🌫️ sprawdzić aktualne zanieczyszczenie powietrza
+    🏃 doradzić w kwestii aktywności fizycznej
+    👕 doradzić w kwestii doboru odpowiedniej odzieży
     """,
                 className="intro-text",
             ),
-            html.H2("Wybierz miasto", className="section-title"),
+            html.H2("Wybierz miasto 🏙️", className="section-title"),
             html.Div(
                 [
                     dcc.Dropdown(
@@ -61,7 +61,7 @@ def create_layout():
             ),
             html.Div(
                 [
-                    html.P("Wybierz datę i godzinę", className="section-title"),
+                    html.P("Wybierz datę i godzinę 🕒", className="section-title"),
                     dcc.DatePickerSingle(
                         id="date-picker",
                         date=now.today(),
@@ -105,33 +105,33 @@ def create_layout():
                 id="confirmed-datetime",
                 style={"marginTop": "10px", "textAlign": "center"},
             ),
-            html.H2("Twoja Prognoza Pogody", className="section-title"),
+            html.H2("Twoja Prognoza Pogody 👇", className="section-title"),
             html.Div(
                 [
                     html.Div(
                         [
-                            html.Span("Temperatura", className="label"),
+                            html.Span("Temperatura 🌡️", className="label"),
                             html.Span(id="temp-c", children="--", className="value"),
                         ],
                         className="row",
                     ),
                     html.Div(
                         [
-                            html.Span("Wiatr", className="label"),
+                            html.Span("Wiatr 💨", className="label"),
                             html.Span(id="wind-kph", children="--", className="value"),
                         ],
                         className="row",
                     ),
                     html.Div(
                         [
-                            html.Span("Zachmurzenie", className="label"),
+                            html.Span("Zachmurzenie ☁️", className="label"),
                             html.Span(id="cloud", children="--", className="value"),
                         ],
                         className="row",
                     ),
                     html.Div(
                         [
-                            html.Span("Szansa na deszcz", className="label"),
+                            html.Span("Szansa na deszcz 🌧️", className="label"),
                             html.Span(id="rain", children="--", className="value"),
                         ],
                         className="row",
@@ -139,7 +139,7 @@ def create_layout():
                 ],
                 className="forecast-box",
             ),
-            html.H2("Jakość powietrza na dzień prognozy", className="section-title"),
+            html.H2("Jakość powietrza na dzień prognozy 👇", className="section-title"),
             html.Div(
                 [
                     html.Div(
@@ -174,7 +174,7 @@ def create_layout():
                 className="air-quality-box",
             ),
             html.H2(
-                "Zalecenia asystenta AI co do ubioru i aktywności",
+                "Zalecenia asystenta AI co do ubioru i aktywności 👇",
                 className="section-title",
             ),
             dcc.Markdown(id="ai-suggestion-box", className="ai-suggestion-box"),
