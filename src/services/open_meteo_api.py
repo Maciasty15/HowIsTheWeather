@@ -85,7 +85,11 @@ def get_weather(location, datetime_str=None):
         lon = location["lon"]
     else:
         coordinates = get_coordinates(location)
-        if coordinates is None or not isinstance(coordinates, list) or len(coordinates) == 0:
+        if (
+            coordinates is None
+            or not isinstance(coordinates, list)
+            or len(coordinates) == 0
+        ):
             print(f"Could not find coordinates for location: {location}")
             return None
         lat = coordinates[0]["lat"]
@@ -164,7 +168,11 @@ def get_air_quality_metrics(location, datetime_str=None):
         lon = location["lon"]
     else:
         coordinates = get_coordinates(location)
-        if coordinates is None or not isinstance(coordinates, list) or len(coordinates) == 0:
+        if (
+            coordinates is None
+            or not isinstance(coordinates, list)
+            or len(coordinates) == 0
+        ):
             print(f"Could not find coordinates for location: {location}")
             return [0, 0, 0, 0]  # Return default values if coordinates not found
         lat = coordinates[0]["lat"]
