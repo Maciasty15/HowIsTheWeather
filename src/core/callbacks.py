@@ -1,35 +1,115 @@
 # src/core/callbacks.py
 from dash import Input, Output, State, ctx
-from src.services.open_meteo_api import get_weather, get_air_quality_metrics
+from src.services.open_meteo_api import (
+    get_weather,
+    get_air_quality_metrics,
+    get_coordinates,
+)
 from src.services.recommender import get_recommendation
-from src.core.constants import city_ids, city_names
+import json
 
 
 def register_callbacks(app):
     @app.callback(
-        [Output("selected-city", "children"), Output("store-city", "data")],
-        [Input(btn_id, "n_clicks") for btn_id in city_ids],
+        Output("country-dropdown", "options"),
+        Input("country-dropdown", "search_value"),
+        prevent_initial_call=True,
     )
-    def show_selected_city(*args):
-        triggered = ctx.triggered_id
-        city_map = dict(zip(city_ids, city_names))
-        city = city_map.get(triggered, None) if triggered else None
-        if city:
-            return f"Wybrane miasto: {city}", {"city": city}
-        return "", {}
+    def update_country_options(search_value):
+        countries = [
+            {"label": "Austria", "value": "Austria"},
+            {"label": "Belgia", "value": "Belgia"},
+            {"label": "Bułgaria", "value": "Bułgaria"},
+            {"label": "Chorwacja", "value": "Chorwacja"},
+            {"label": "Cypr", "value": "Cypr"},
+            {"label": "Czechy", "value": "Czechy"},
+            {"label": "Dania", "value": "Dania"},
+            {"label": "Estonia", "value": "Estonia"},
+            {"label": "Finlandia", "value": "Finlandia"},
+            {"label": "Francja", "value": "Francja"},
+            {"label": "Grecja", "value": "Grecja"},
+            {"label": "Hiszpania", "value": "Hiszpania"},
+            {"label": "Holandia", "value": "Holandia"},
+            {"label": "Irlandia", "value": "Irlandia"},
+            {"label": "Litwa", "value": "Litwa"},
+            {"label": "Luksemburg", "value": "Luksemburg"},
+            {"label": "Łotwa", "value": "Łotwa"},
+            {"label": "Malta", "value": "Malta"},
+            {"label": "Niemcy", "value": "Niemcy"},
+            {"label": "Polska", "value": "Polska"},
+            {"label": "Portugalia", "value": "Portugalia"},
+            {"label": "Rumunia", "value": "Rumunia"},
+            {"label": "Słowacja", "value": "Słowacja"},
+            {"label": "Słowenia", "value": "Słowenia"},
+            {"label": "Szwecja", "value": "Szwecja"},
+            {"label": "Węgry", "value": "Węgry"},
+            {"label": "Włochy", "value": "Włochy"},
+        ]
+        if search_value:
+            return [c for c in countries if search_value.lower() in c["label"].lower()]
+        return countries
+
+    @app.callback(
+        Output("city-dropdown", "options"),
+        [
+            Input("city-dropdown", "search_value"),
+            Input("country-dropdown", "value"),
+            Input("last-selected-city", "data"),
+        ],
+        State("city-dropdown", "value"),
+        prevent_initial_call=True,
+    )
+    def update_city_options(search_value, country, last_selected, current_value):
+        options = []
+        if country and search_value and len(search_value) >= 2:
+            matches = get_coordinates(f"{search_value}, {country}")
+            if matches is None:
+                matches = []
+            options = [
+                {
+                    "label": f"{m['name']} (City), {m['state']} (State), {m['country']} (Country)",
+                    "value": json.dumps(m),
+                }
+                for m in matches
+            ]
+        # Always include the last selected city if not present
+        if last_selected and last_selected not in [opt["value"] for opt in options]:
+            city = json.loads(last_selected)
+            options.append(
+                {
+                    "label": f"{city['name']} (City), {city['state']} (State), {city['country']} (Country)",
+                    "value": last_selected,
+                }
+            )
+        # Also include the current value if not present
+        if current_value and current_value not in [opt["value"] for opt in options]:
+            city = json.loads(current_value)
+            options.append(
+                {
+                    "label": f"{city['name']} (City), {city['state']} (State), {city['country']} (Country)",
+                    "value": current_value,
+                }
+            )
+        return options
 
     @app.callback(
         [Output("confirmed-datetime", "children"), Output("store-datetime", "data")],
-        Input("confirm-time", "n_clicks"),
-        State("date-picker", "date"),
-        State("hour-input", "value"),
-        State("minute-input", "value"),
+        [
+            Input("date-picker", "date"),
+            Input("hour-input", "value"),
+            Input("minute-input", "value"),
+        ],
     )
-    def show_confirmed_datetime(n_clicks, date, hour, minute):
-        if not n_clicks or not all([date, hour is not None, minute is not None]):
+    def show_confirmed_datetime(date, hour, minute):
+        if not all([date, hour is not None, minute is not None]):
             return "Proszę wybrać datę i godzinę", None
         h, m = f"{int(hour):02d}", f"{int(minute):02d}"
-        return f"Wybrana data i godzina: {date} {h}:{m}", f"{date}T{h}:{m}"
+        date_str = str(date)
+        if "T" in date_str:
+            date_part = date_str.split("T")[0]
+        else:
+            date_part = date_str
+        return f"{date_part} {h}:{m}", f"{date_part}T{h}:{m}"
 
     @app.callback(
         [
@@ -69,8 +149,16 @@ def register_callbacks(app):
     def update_air_ui(selected_city, selected_datetime):
         if not selected_city:
             return "--", "--", "--", "--", {}
-        city = selected_city.get("city", selected_city)
-        df = get_air_quality_metrics(city, selected_datetime or None)
+        # If selected_city is a dict with lat/lon, pass the full dict to get_air_quality_metrics
+        if (
+            isinstance(selected_city, dict)
+            and "lat" in selected_city
+            and "lon" in selected_city
+        ):
+            df = get_air_quality_metrics(selected_city, selected_datetime or None)
+        else:
+            city = selected_city.get("city", selected_city)
+            df = get_air_quality_metrics(city, selected_datetime or None)
         air_data = {"pm10": df[0], "pm2_5": df[1], "co": df[2], "no2": df[3]}
         return df[2], df[3], df[1], df[0], air_data
 
@@ -86,7 +174,16 @@ def register_callbacks(app):
         if not weather_data or not selected_city:
             return "Podpowiedź z Gemini - może zająć chwilę po wyświetleniu danych pogodowych"
 
-        location = selected_city.get("city", "nieznana lokalizacja")
+        # Use full city info if available
+        if isinstance(selected_city, dict):
+            location = f"{selected_city.get('name', '')}, {selected_city.get('country', '')}, {selected_city.get('state', '')}".strip(
+                ", "
+            )
+            if not selected_city.get("name"):
+                location = "nieznana lokalizacja"
+        else:
+            location = selected_city or "nieznana lokalizacja"
+
         weather_parts = [
             f"Temperatura: {weather_data.get('temp-c', '--')}\u00b0C",
             f"Wiatr: {weather_data.get('wind-kph', '--')} km/h",
@@ -106,3 +203,25 @@ def register_callbacks(app):
 
         full_description = "\n".join(weather_parts + [""] + air_parts)
         return get_recommendation(location, full_description)
+
+    @app.callback(
+        [
+            Output("city-dropdown", "value"),
+            Output("store-city", "data"),
+            Output("last-selected-city", "data"),
+        ],
+        [Input("country-dropdown", "value"), Input("city-dropdown", "value")],
+        prevent_initial_call=True,
+    )
+    def handle_city_and_country_change(country, selected_city_json):
+        ctx_trigger = ctx.triggered_id
+        if ctx_trigger == "country-dropdown":
+            # Country changed: clear city
+            return None, {}, None
+        elif ctx_trigger == "city-dropdown" and selected_city_json:
+            try:
+                city = json.loads(selected_city_json)
+                return selected_city_json, city, selected_city_json
+            except Exception:
+                return selected_city_json, {}, selected_city_json
+        return None, {}, None
