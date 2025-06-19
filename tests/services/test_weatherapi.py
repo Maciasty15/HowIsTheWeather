@@ -21,7 +21,15 @@ class TestGetCoordinates:
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {
-            "results": [{"latitude": 52.23, "longitude": 21.01}]
+            "results": [
+                {
+                    "latitude": 52.23,
+                    "longitude": 21.01,
+                    "country": "Polska",
+                    "admin1": "Mazowieckie",
+                    "name": "Warszawa",
+                }
+            ]
         }
         mock_get.return_value = mock_response
 
@@ -29,14 +37,15 @@ class TestGetCoordinates:
         encoded_location = urllib.parse.quote(location)
 
         # act
-        lat, lon = get_coordinates(location)
+        results = get_coordinates(location)
 
         # assert
-        assert lat == "52.23"
-        assert lon == "21.01"
-        mock_get.assert_called_once_with(
-            f"{GEOCODING_BASE_URL}search?name={encoded_location}&count=1&format=json"
-        )
+        assert isinstance(results, list)
+        assert results[0]["lat"] == "52.23"
+        assert results[0]["lon"] == "21.01"
+        assert results[0]["country"] == "Polska"
+        assert results[0]["state"] == "Mazowieckie"
+        assert results[0]["name"] == "Warszawa"
 
     @patch("requests.get")
     def test_get_coordinates_no_results(self, mock_get):
@@ -47,11 +56,10 @@ class TestGetCoordinates:
         mock_get.return_value = mock_response
 
         # act
-        lat, lon = get_coordinates("Nieistniejące Miasto")
+        results = get_coordinates("Nieistniejące Miasto")
 
         # assert
-        assert lat is None
-        assert lon is None
+        assert results is None
 
     @patch("requests.get")
     def test_get_coordinates_api_error(self, mock_get):
@@ -61,11 +69,10 @@ class TestGetCoordinates:
         mock_get.return_value = mock_response
 
         # act
-        lat, lon = get_coordinates("Warszawa")
+        results = get_coordinates("Warszawa")
 
         # assert
-        assert lat is None
-        assert lon is None
+        assert results is None
 
 
 class TestGetWeather:

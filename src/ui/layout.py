@@ -1,6 +1,5 @@
 from dash import html, dcc
 import datetime
-from src.core.constants import city_ids, city_names
 
 
 def create_layout():
@@ -13,6 +12,7 @@ def create_layout():
             dcc.Store(id="store-gemini", data=""),
             dcc.Store(id="store-city", data=""),
             dcc.Store(id="store-datetime", data=""),
+            dcc.Store(id="last-selected-city", data=None),
             html.H1("HowIsTheWeather", className="title"),
             html.P(
                 """
@@ -27,10 +27,34 @@ def create_layout():
             html.H2("Wybierz miasto", className="section-title"),
             html.Div(
                 [
-                    html.Button(city, id=btn_id, className="city-button")
-                    for city, btn_id in zip(city_names, city_ids)
+                    dcc.Dropdown(
+                        id="country-dropdown",
+                        options=[],
+                        placeholder="Wybierz kraj...",
+                        className="country-input",
+                        searchable=True,
+                        clearable=True,
+                        value=None,
+                    ),
+                    dcc.Dropdown(
+                        id="city-dropdown",
+                        options=[],
+                        placeholder="Wpisz lub wybierz miasto...",
+                        className="city-input",
+                        searchable=True,
+                        clearable=True,
+                        optionHeight=40,
+                        value=None,
+                    ),
                 ],
-                className="city-button-container",
+                className="city-input-container",
+            ),
+            html.Div(
+                id="city-matches", style={"marginTop": "10px", "textAlign": "center"}
+            ),
+            html.Div(
+                id="city-matches-list",
+                style={"marginTop": "10px", "textAlign": "center"},
             ),
             html.Div(
                 id="selected-city", style={"marginTop": "10px", "textAlign": "center"}
@@ -46,28 +70,30 @@ def create_layout():
                     ),
                     html.Div(
                         [
-                            dcc.Input(
+                            dcc.Dropdown(
                                 id="hour-input",
-                                type="number",
-                                placeholder="HH",
-                                min=0,
-                                max=23,
+                                options=[
+                                    {"label": f"{h:02d}", "value": h} for h in range(24)
+                                ],
                                 value=now.hour,
+                                clearable=False,
                                 className="time-input",
+                                style={
+                                    "width": "80px",
+                                    "display": "inline-block",
+                                    "marginRight": "10px",
+                                },
                             ),
-                            dcc.Input(
+                            dcc.Dropdown(
                                 id="minute-input",
-                                type="number",
-                                placeholder="MM",
-                                min=0,
-                                max=59,
-                                value=now.minute,
+                                options=[
+                                    {"label": f"{m:02d}", "value": m}
+                                    for m in range(0, 60, 5)
+                                ],
+                                value=(now.minute // 5) * 5,
+                                clearable=False,
                                 className="time-input",
-                            ),
-                            html.Button(
-                                "Zatwierdź datę i czas",
-                                id="confirm-time",
-                                className="confirm-button",
+                                style={"width": "80px", "display": "inline-block"},
                             ),
                         ],
                         className="time-input-group",

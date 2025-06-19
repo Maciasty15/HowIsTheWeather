@@ -12,15 +12,16 @@ GEOCODING_BASE_URL = os.getenv("GEOCODING_BASE_URL")
 OPEN_METEO_BASE_URL = os.getenv("OPEN_METEO_BASE_URL")
 
 
-def get_coordinates(location) -> tuple[str, str] | tuple[None, None]:
+def get_coordinates(location) -> list[dict[str, str]] | None:
     print(f"Original location name: {location}")
 
     # Encode the location name properly for URL
     encoded_location = urllib.parse.quote(location)
     print(f"URL-encoded location name: {encoded_location}")
 
-    url = f"{GEOCODING_BASE_URL}search?name={encoded_location}&count=1&format=json"
-    print(f"Searching coordinates for location: {location}")
+    # First try with language=pl
+    url = f"{GEOCODING_BASE_URL}search?name={encoded_location}&count=10&format=json&language=pl"
+    print(f"Searching coordinates for location: {location} (with language=pl)")
     print(f"Using URL: {url}")
     response = requests.get(url)
     print(f"Geocoding response status: {response.status_code}")
@@ -28,41 +29,67 @@ def get_coordinates(location) -> tuple[str, str] | tuple[None, None]:
         data = response.json()
         print(f"Geocoding data: {data}")
         if data.get("results"):
-            result = data["results"][0]
-            lat = result["latitude"]
-            lon = result["longitude"]
-            print(f"Found coordinates: {lat}, {lon}")
-            return str(lat), str(lon)
+            results = []
+            for result in data["results"]:
+                lat = result["latitude"]
+                lon = result["longitude"]
+                country = result.get("country", "")
+                state = result.get("admin1", "")
+                results.append(
+                    {
+                        "lat": str(lat),
+                        "lon": str(lon),
+                        "country": country,
+                        "state": state,
+                        "name": result.get("name", location),
+                    }
+                )
+            if results:
+                return results
+    # Fallback: try without language param
+    url = f"{GEOCODING_BASE_URL}search?name={encoded_location}&count=10&format=json"
+    print(f"Fallback: Searching coordinates for location: {location} (no language)")
+    print(f"Using URL: {url}")
+    response = requests.get(url)
+    print(f"Geocoding response status: {response.status_code}")
+    if response.status_code == 200:
+        data = response.json()
+        print(f"Geocoding data: {data}")
+        if data.get("results"):
+            results = []
+            for result in data["results"]:
+                lat = result["latitude"]
+                lon = result["longitude"]
+                country = result.get("country", "")
+                state = result.get("admin1", "")
+                results.append(
+                    {
+                        "lat": str(lat),
+                        "lon": str(lon),
+                        "country": country,
+                        "state": state,
+                        "name": result.get("name", location),
+                    }
+                )
+            if results:
+                return results
     print("Could not find coordinates")
-    return None, None
+    return None
 
 
 def get_weather(location, datetime_str=None):
     print(f"\nGetting weather for: {location} at {datetime_str}")
-    lat, lon = get_coordinates(location)
-    if lat is None or lon is None:
-        print(f"Could not find coordinates for location: {location}")
-        return None
-
-    # Weather codes mapping
-    # weather_codes = {
-    # 0: "Bezchmurnie",
-    # 1: "Głównie bezchmurnie",
-    # 2: "Częściowe zachmurzenie",
-    # 3: "Zachmurzenie duże",
-    # 45: "Mgła",
-    # 48: "Osadzająca się mgła",
-    # 51: "Lekka mżawka",
-    # 53: "Umiarkowana mżawka",
-    # 55: "Gęsta mżawka",
-    # 61: "Lekki deszcz",
-    # 63: "Umiarkowany deszcz",
-    # 65: "Silny deszcz",
-    # 71: "Lekki śnieg",
-    # 73: "Umiarkowany śnieg",
-    # 75: "Gęsty śnieg",
-    # 95: "Burza",
-    # }
+    # Accept both city name (str) and dict with lat/lon
+    if isinstance(location, dict) and "lat" in location and "lon" in location:
+        lat = location["lat"]
+        lon = location["lon"]
+    else:
+        coordinates = get_coordinates(location)
+        if coordinates is None:
+            print(f"Could not find coordinates for location: {location}")
+            return None
+        lat = coordinates["lat"]
+        lon = coordinates["lon"]
 
     url = (
         f"{OPEN_METEO_BASE_URL}forecast"
@@ -131,10 +158,17 @@ def get_weather(location, datetime_str=None):
 
 def get_air_quality_metrics(location, datetime_str=None):
     print(f"\nGetting air quality metrics for: {location} at {datetime_str}")
-    lat, lon = get_coordinates(location)
-    if lat is None or lon is None:
-        print(f"Could not find coordinates for location: {location}")
-        return [0, 0, 0, 0]  # Return default values if coordinates not found
+    # Accept both city name (str) and dict with lat/lon
+    if isinstance(location, dict) and "lat" in location and "lon" in location:
+        lat = location["lat"]
+        lon = location["lon"]
+    else:
+        coordinates = get_coordinates(location)
+        if coordinates is None:
+            print(f"Could not find coordinates for location: {location}")
+            return [0, 0, 0, 0]  # Return default values if coordinates not found
+        lat = coordinates["lat"]
+        lon = coordinates["lon"]
 
     url = (
         f"{AIR_QUALITY_BASE_URL}/air-quality"
@@ -197,7 +231,6 @@ def get_air_quality_metrics(location, datetime_str=None):
                         current_carbon_monoxide,
                         current_nitrogen_dioxide,
                     ]
-
             print("No valid hourly data found in response")
         else:
             print(f"Error response from API: {response.status_code}")
