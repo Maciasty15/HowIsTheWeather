@@ -153,7 +153,9 @@ def create_layout():
                     html.Div(
                         [
                             html.Span("Widoczność 🔭", className="label"),
-                            html.Span(id="visibility", children="--", className="value"),
+                            html.Span(
+                                id="visibility", children="--", className="value"
+                            ),
                         ],
                         className="row",
                     ),
@@ -207,7 +209,9 @@ def create_layout():
                     ),
                     html.Div(
                         [
-                            html.Span("Indeks Jakości Powietrza (AQI) 📈", className="label"),
+                            html.Span(
+                                "Indeks Jakości Powietrza (AQI) 📈", className="label"
+                            ),
                             html.Span(id="air-aqi", children="--", className="value"),
                         ],
                         className="row",
@@ -238,9 +242,13 @@ def create_layout():
                     html.P("ℹ️ Wskazówki:", className="label"),
                     html.Ul(
                         [
-                            html.Li("Upewnij się, że wybrana godzina należy do przyszłości."),
+                            html.Li(
+                                "Upewnij się, że wybrana godzina należy do przyszłości."
+                            ),
                             html.Li("Wybierz inne miasto, jeśli nie masz wyników."),
-                            html.Li("Dane pogodowe są przybliżone, mogą się różnić od lokalnych."),
+                            html.Li(
+                                "Dane pogodowe są przybliżone, mogą się różnić od lokalnych."
+                            ),
                         ]
                     ),
                 ],
