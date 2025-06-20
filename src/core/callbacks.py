@@ -6,6 +6,7 @@ from src.services.open_meteo_api import (
     get_coordinates,
 )
 from src.services.recommender import get_recommendation
+from src.core.constants import countries
 import json
 
 
@@ -16,35 +17,6 @@ def register_callbacks(app):
         prevent_initial_call=True,
     )
     def update_country_options(search_value):
-        countries = [
-            {"label": "Austria", "value": "Austria"},
-            {"label": "Belgia", "value": "Belgia"},
-            {"label": "Bułgaria", "value": "Bułgaria"},
-            {"label": "Chorwacja", "value": "Chorwacja"},
-            {"label": "Cypr", "value": "Cypr"},
-            {"label": "Czechy", "value": "Czechy"},
-            {"label": "Dania", "value": "Dania"},
-            {"label": "Estonia", "value": "Estonia"},
-            {"label": "Finlandia", "value": "Finlandia"},
-            {"label": "Francja", "value": "Francja"},
-            {"label": "Grecja", "value": "Grecja"},
-            {"label": "Hiszpania", "value": "Hiszpania"},
-            {"label": "Holandia", "value": "Holandia"},
-            {"label": "Irlandia", "value": "Irlandia"},
-            {"label": "Litwa", "value": "Litwa"},
-            {"label": "Luksemburg", "value": "Luksemburg"},
-            {"label": "Łotwa", "value": "Łotwa"},
-            {"label": "Malta", "value": "Malta"},
-            {"label": "Niemcy", "value": "Niemcy"},
-            {"label": "Polska", "value": "Polska"},
-            {"label": "Portugalia", "value": "Portugalia"},
-            {"label": "Rumunia", "value": "Rumunia"},
-            {"label": "Słowacja", "value": "Słowacja"},
-            {"label": "Słowenia", "value": "Słowenia"},
-            {"label": "Szwecja", "value": "Szwecja"},
-            {"label": "Węgry", "value": "Węgry"},
-            {"label": "Włochy", "value": "Włochy"},
-        ]
         if search_value:
             return [c for c in countries if search_value.lower() in c["label"].lower()]
         return countries
