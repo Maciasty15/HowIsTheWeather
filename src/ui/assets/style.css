@@ -1,5 +1,5 @@
 /* assets/style.css */
-
+ 
 /* Ogólne ustawienia strony */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -7,7 +7,7 @@ body {
   margin: 20px;
   color: #333;
 }
-
+ 
 /* Nagłówek */
 .header-title {
   font-size: 40px;
@@ -22,7 +22,7 @@ body {
   position: absolute;
   margin-left: 10px;
 }
-
+ 
 /* Opis pod nagłówkiem */
 .description-text {
   font-size: 18px;
@@ -30,7 +30,7 @@ body {
   text-align: left;
   margin-bottom: 40px;
 }
-
+ 
 /* Kontener na wykres z efektem karty */
 .graph-container {
   margin: 0 auto;
@@ -40,7 +40,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
+ 
 /* Tytuły sekcji */
 .title {
   font-size: 2.7rem;
@@ -49,7 +49,7 @@ body {
   margin-top: 25px;
   color: #0d47a1;
 }
-
+ 
 .intro-text {
   font-size: 1.15rem;
   max-width: 700px;
@@ -58,7 +58,7 @@ body {
   white-space: pre-line;
   color: #333;
 }
-
+ 
 .section-title {
   font-size: 1.6rem;
   margin-top: 35px;
@@ -67,7 +67,7 @@ body {
   border-left: 6px solid #26a69a;
   padding-left: 10px;
 }
-
+ 
 /* Przycisk miasta */
 .city-button-container {
   display: flex;
@@ -75,7 +75,7 @@ body {
   gap: 10px;
   justify-content: left;
 }
-
+ 
 .city-button {
   padding: 0.6em 1.2em;
   font-size: 1rem;
@@ -89,7 +89,7 @@ body {
 .city-button:hover {
   background-color: #1e88e5;
 }
-
+ 
 /* Sekcja daty i czasu */
 .datetime-section {
   display: flex;
@@ -97,14 +97,14 @@ body {
   align-items: left;
   margin-top: 20px;
 }
-
+ 
 .time-input-group {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-top: 12px;
 }
-
+ 
 .time-input {
   width: 65px;
   padding: 6px;
@@ -112,7 +112,7 @@ body {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-
+ 
 /* Boxy z prognozami i jakością powietrza */
 .forecast-box,
 .air-quality-box {
@@ -121,7 +121,7 @@ body {
   gap: 18px;
   margin-top: 20px;
 }
-
+ 
 /* AI Suggestions */
 .ai-suggestion-box {
   border: 2px dashed #90a4ae;
@@ -143,15 +143,13 @@ body {
   background-color: #f1f8e9;
   padding: 0 5px;
 }
-
-/* Etkiety */
+ 
 .label {
   font-weight: 600;
   margin-right: 1rem;
   color: #455a64;
 }
-
-/* Rzędy z danymi */
+ 
 .row {
   display: flex;
   align-items: center;
@@ -160,19 +158,94 @@ body {
   max-width: 450px;
   margin: 0 auto;
 }
-
+ 
 .value {
   font-weight: bold;
   color: #2e7d32;
 }
-
-/* Animacja dla przyjemnego wejścia */
+ 
 .fade-in {
   animation: fadeIn 0.6s ease-in-out;
 }
-
+ 
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
-
+ 
+/* Dodatkowe style */
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 850px;
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: scale(1.01);
+}
+ 
+.alert-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+ 
+.tab.active {
+  background-color: #7986cb;
+  color: #fff;
+}
+ 
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+ 
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+@media (max-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+ 
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #1e88e5;
+  color: white;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+ 
+.weather-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #bbdefb;
+  border-radius: 8px;
+  background-color: #e3f2fd;
+  max-width: 300px;
+}
+ 
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 15px;
+  font-size: 0.9rem;
+  color: #78909c;
+}

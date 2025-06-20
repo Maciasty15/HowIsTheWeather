@@ -24,7 +24,7 @@ def create_layout():
     """,
                 className="intro-text",
             ),
-            html.H2("Wybierz miasto 🏙️", className="section-title"),
+            html.H2("Wybierz miasto 🌆️", className="section-title"),
             html.Div(
                 [
                     dcc.Dropdown(
@@ -136,6 +136,29 @@ def create_layout():
                         ],
                         className="row",
                     ),
+                    # html.Div(
+                    #     [
+                    #         html.Span("Wilgotność 💧", className="label"),
+                    #         html.Span(id="humidity", children="--", className="value"),
+                    #     ],
+                    #     className="row",
+                    # ),
+                    # html.Div(
+                    #     [
+                    #         html.Span("Indeks UV 🌞", className="label"),
+                    #         html.Span(id="uv-index", children="--", className="value"),
+                    #     ],
+                    #     className="row",
+                    # ),
+                    # html.Div(
+                    #     [
+                    #         html.Span("Widoczność 🔭", className="label"),
+                    #         html.Span(
+                    #             id="visibility", children="--", className="value"
+                    #         ),
+                    #     ],
+                    #     className="row",
+                    # ),
                 ],
                 className="forecast-box",
             ),
@@ -170,6 +193,29 @@ def create_layout():
                         ],
                         className="row",
                     ),
+                    # html.Div(
+                    #     [
+                    #         html.Span("Dwutlenek siarki SO₂ ug/m3", className="label"),
+                    #         html.Span(id="air-so2", children="--", className="value"),
+                    #     ],
+                    #     className="row",
+                    # ),
+                    # html.Div(
+                    #     [
+                    #         html.Span("Ozon O₃ ug/m3", className="label"),
+                    #         html.Span(id="air-o3", children="--", className="value"),
+                    #     ],
+                    #     className="row",
+                    # ),
+                    # html.Div(
+                    #     [
+                    #         html.Span(
+                    #             "Indeks Jakości Powietrza (AQI) 📈", className="label"
+                    #         ),
+                    #         html.Span(id="air-aqi", children="--", className="value"),
+                    #     ],
+                    #     className="row",
+                    # ),
                 ],
                 className="air-quality-box",
             ),
@@ -178,5 +224,35 @@ def create_layout():
                 className="section-title",
             ),
             dcc.Markdown(id="ai-suggestion-box", className="ai-suggestion-box"),
+            # html.H2("Podziel się swoją opinią 📝", className="section-title"),
+            # html.Div(
+            #     [
+            #         dcc.Textarea(
+            #             id="feedback-input",
+            #             placeholder="Co sądzisz o aplikacji?",
+            #             style={"width": "100%", "height": 100},
+            #         ),
+            #         html.Button("Wyślij opinię", id="submit-feedback", n_clicks=0),
+            #         html.Div(id="feedback-confirmation", style={"marginTop": "10px"}),
+            #     ],
+            #     className="graph-container",
+            # ),
+            html.Div(
+                [
+                    html.P("ℹ️ Wskazówki:", className="label"),
+                    html.Ul(
+                        [
+                            html.Li(
+                                "Upewnij się, że wybrana godzina należy do przyszłości."
+                            ),
+                            html.Li("Wybierz inne miasto, jeśli nie masz wyników."),
+                            html.Li(
+                                "Dane pogodowe są przybliżone, mogą się różnić od lokalnych."
+                            ),
+                        ]
+                    ),
+                ],
+                className="ai-suggestion-box",
+            ),
         ]
     )
